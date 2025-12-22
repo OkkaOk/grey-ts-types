@@ -5,6 +5,7 @@ interface IArguments { }
 interface Boolean { }
 
 interface String {
+	readonly length: number; // In greyscript this was len()
 	/** Returns the Unicode code of the first character of the string */
 	code(): number;
 	hasIndex(index: number): boolean;
@@ -13,7 +14,6 @@ interface String {
 	insert(index: number, value: string): string;
 	isMatch(pattern: string, regexOptions?: string): number;
 	lastIndexOf(value: string): number;
-	len(): number;
 	lower(): string;
 	matches(pattern: string, regexOptions?: string): Record<number, string>;
 	remove(value: string): string;
@@ -34,11 +34,12 @@ interface Number {
 
 type PropertyKey = number | string | symbol;
 interface Object {
-	hasIndex(key: PropertyKey): boolean;
+	/** Returns the number of items inside the object */
+	readonly size: number; // In greyscript this was len()
+
+	hasIndex(key: PropertyKey): boolean
 	indexOf(value: any): any;
 	indexes<T extends PropertyKey>(): Array<T>;
-	/** Returns the number of items inside the object */
-	len(): number;
 	pop(): any;
 	pull(): any;
 	push(key: PropertyKey): any;
@@ -49,13 +50,30 @@ interface Object {
 	values(): Array<any>;
 }
 
+interface ObjectConstructor {
+	new (value?: any): Object
+	
+	readonly prototype: Object;
+
+	hasOwn<T extends PropertyKey, U = object>(o: U, key: T): o is (T extends keyof U ? U : U & { [K in T]: unknown })
+	
+	/** Copy the properties of the source to the target */
+	assign<T extends {}, U>(target: T, source: U): T & U;
+	assign<T extends {}, U, V>(target: T, source: U, source2: V): T & U & V;
+	assign<T extends {}, U, V, W>(target: T, source: U, source2: V, source3: W): T & U & V & W;
+	assign(target: object, ...sources: any[]): any;
+
+	keys(o: object): string[];
+}
+
 interface Array<T> {
+	readonly length: number; // In greyscript this was len()
+	concat(...arrays: Array<T>[]): Array<T> // Transpiler turns this into arr1 + arr2 + etc
 	hasIndex(index: number): boolean;
 	indexOf(value: T, offset?: number): number | null;
 	indexes(): Array<number>;
 	insert(index: number, value: T): Array<T>;
 	join(delimiter: string): string;
-	len(): number;
 	pop(): T;
 	pull(): T;
 	push(value: T): Array<T>;
@@ -63,7 +81,7 @@ interface Array<T> {
 	replace(oldValue: T, newValue: T, maxCount?: number): Array<T>;
 	reverse(): null;
 	shuffle(): null;
-	sort(key: PropertyKey, ascending?: boolean): Array<T>;
+	sort(key: PropertyKey | null, ascending?: boolean): Array<T>;
 	sum(): number;
 	values(): Array<T>;
 
@@ -75,14 +93,19 @@ interface Function {
 
 }
 
-declare var String: { readonly prototype: String; };
+declare var String: {
+	new (value?: string): String;
+	(value?: any): string;
+	readonly prototype: String;
+};
+
 declare var Number: { readonly prototype: Number; };
 declare var Boolean: { readonly prototype: Number; };
-declare var Object: { readonly prototype: Object; };
 declare var Array: { readonly prototype: Array<any>; };
 declare var Function: { readonly prototype: Function; };
+declare var Object: ObjectConstructor;
 
-declare var globals: Object | any;
+declare var globals: Object & { [key: string]: unknown };
 /** The parameters given to this script on launch */
 declare var params: Array<string>;
 
@@ -105,12 +128,12 @@ declare namespace GreyHack {
 	function cos(value: number): number;
 	function currentDate(): string;
 	function currentPath(): string;
-	function exit(message?: string): null;
+	function exit(message?: string): never;
 	function floor(value: number): number;
 	function formatColumns(columns: string): string;
 	function getAbsPath(path: string, basePath?: string): string;
 	function getCtf(user: string, password: string, eventName: string): CtfEvent | string;
-	function getCustomObject<T extends any>(): T & Record<string, any>;
+	function getCustomObject<T=object>(): T & Record<string, any>;
 	/** Returns by default the {@link Router router} to which the executing computer is connected to. 
 	 * 
 	 * Optionally an IP address can be provided. In case of failure `null` is returned. 
@@ -119,7 +142,7 @@ declare namespace GreyHack {
 	 * @example const router = getRouter();
 	 * print("Router's essid name is: " + router.essidName);
 	 */
-	function getRouter(): Router | null;
+	function getRouter(ip?: string): Router | null;
 	/**
 	 * Returns the {@link Shell shell} that is executing the current script.
 	 * 
@@ -135,7 +158,7 @@ declare namespace GreyHack {
 	function hash(value: any): number;
 	function homeDir(): string;
 	function importCode(path: string): null;
-	function includeLib(path: string): Crypto | Metaxploit | Service | BlockChain | AptClient | SmartAppliance | TrafficNet | null;
+	function includeLib(path: string): LibTypes[keyof LibTypes] | null;
 	function isValidIp(ip: string): number;
 	function launchPath(): string;
 	function log(value: number, base?: number): number;
@@ -166,6 +189,15 @@ declare namespace GreyHack {
 
 	function getType(value: any): keyof GameTypeMap;
 	function isType<T extends keyof GameTypeMap>(value: any, type: T): value is GameTypeMap[T];
+	/** FOR TRANSPILER ONLY
+	 * 
+	 * Includes the given source to this position. If the file was already in the output then it will be ignored
+	 * 
+	 * Be careful to not have custom types in those files because the transpiler **will not** know about those
+	 * 
+	 * Can be a folder if you want to include them all 
+	 * @param file The absolute or relative path of the file */
+	function include(file: string): void;
 
 	interface AptClient {
 		classID: "aptClientLib";
@@ -412,7 +444,45 @@ declare namespace GreyHack {
 		touch: (destFolder: string, fileName: string) => boolean | string;
 		wifiNetworks: (netDevice: netDevice) => Array<string> | null;
 	}
+
+	interface BaseFile {
+		classID: "ftpFile" | "file";
+		name: string | null;
+		group: string;
+		owner: string | null;
+		permissions: string | null;
+		size: string | null;
+		copy: (destFolder?: string, newName?: string) => string | boolean | null;
+		delete: () => string;
+		hasPermission: (perms: "r" | "w" | "x") => boolean | null;
+		isBinary: () => boolean | null;
+		isFolder: () => boolean | null;
+		isSymlink: () => boolean | null;
+		move: (destFolder: string, newName?: string) => string | boolean | null;
+		path: (symLinkOriginalPath?: boolean) => string;
+		rename: (name: string) => string | boolean;
+	}
+
+	interface BaseComputer<FileType extends GreyHack.File | GreyHack.FtpFile> {
+		classID: "ftpComputer" | "computer";
+		getName: () => string;
+		createFolder: (path: string, folderName?: string) => string | boolean;
+		file: (path: string) => FileType | null;
+	}
+
+	type LibTypes = {
+		"aptclient.so": GreyHack.AptClient,
+		"metaxploit.so": GreyHack.Metaxploit,
+		"crypto.so": GreyHack.Crypto,
+		"libftp.so": GreyHack.Service,
+		"libssh.so": GreyHack.Service,
+		"libhttp.so": GreyHack.Service,
+		"blockchain.so": GreyHack.BlockChain,
+		"libsmartappliance.so": GreyHack.SmartAppliance,
+		"libtrafficnet.so": GreyHack.TrafficNet,
+	}
 }
+
 
 declare type Computer = GreyHack.Computer
 
@@ -475,8 +545,10 @@ declare var wait: typeof GreyHack.wait;
 declare var whois: typeof GreyHack.whois;
 declare var yield: typeof GreyHack.yield;
 
-declare var getType: typeof GreyHack.getType;
-declare var isType: typeof GreyHack.isType;
+declare const getType: typeof GreyHack.getType;
+declare const isType: typeof GreyHack.isType;
+
+declare const include: typeof GreyHack.include;
 
 type OtherTypeMap = {
 	"null": null,
@@ -518,31 +590,6 @@ type ClassIDMap = {
 
 type GameTypeMap = ClassIDMap & OtherTypeMap;
 
-interface BaseFile {
-	classID: "ftpFile" | "file";
-	name: string | null;
-	group: string;
-	owner: string | null;
-	permissions: string | null;
-	size: string | null;
-	copy: (destFolder?: string, newName?: string) => string | boolean | null;
-	delete: () => string;
-	has_permission: (perms?: string) => boolean | null;
-	isBinary: () => boolean | null;
-	isFolder: () => boolean | null;
-	isSymlink: () => boolean | null;
-	move: (destFolder: string, newName?: string) => string | boolean | null;
-	path: (symLinkOriginalPath?: boolean) => string;
-	rename: (name: string) => string | boolean;
-}
-
-interface BaseComputer<FileType extends GreyHack.File | GreyHack.FtpFile> {
-	classID: "ftpComputer" | "computer";
-	getName: () => string;
-	createFolder: (path: string, folderName?: string) => string | boolean;
-	file: (path: string) => FileType | null;
-}
-
 // Some utility types snatched from default libs.
 
 /**
@@ -550,50 +597,50 @@ interface BaseComputer<FileType extends GreyHack.File | GreyHack.FtpFile> {
  */
 type Partial<T> = {
 	[P in keyof T]?: T[P];
-} & Object;
+};
 
 /**
  * Make all properties in T required
  */
 type Required<T> = {
 	[P in keyof T]-?: T[P];
-} & Object;
+};
 
 /**
  * Make all properties in T readonly
  */
 type Readonly<T> = {
 	readonly [P in keyof T]: T[P];
-} & Object;
+};
 
 /**
  * From T, pick a set of properties whose keys are in the union K
  */
 type Pick<T, K extends keyof T> = {
 	[P in K]: T[P];
-} & Object;
+};
 
 /**
  * Construct a type with a set of properties K of type T
  */
 type Record<K extends keyof any, T> = {
 	[P in K]: T;
-} & Object;
+};
 
 /**
  * Exclude from T those types that are assignable to U
  */
-type Exclude<T, U> = (T extends U ? never : T) & Object;
+type Exclude<T, U> = (T extends U ? never : T);
 
 /**
  * Extract from T those types that are assignable to U
  */
-type Extract<T, U> = (T extends U ? T : never) & Object;
+type Extract<T, U> = (T extends U ? T : never);
 
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * Obtain the parameters of a function type in a tuple

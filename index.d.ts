@@ -10,7 +10,7 @@ interface String {
 	code(): number;
 	hasIndex(index: number): boolean;
 	indexOf(value: string, offset?: number): number | null;
-	indexes(): Array<number>;
+	indexes(): number[];
 	insert(index: number, value: string): string;
 	isMatch(pattern: string, regexOptions?: string): number;
 	lastIndexOf(value: string): number;
@@ -18,12 +18,12 @@ interface String {
 	matches(pattern: string, regexOptions?: string): Record<number, string>;
 	remove(value: string): string;
 	replace(pattern: string, newValue: string, regexOptions?: string): string;
-	split(pattern: string, regexOptions?: string): Array<string>;
+	split(pattern: string, regexOptions?: string): string[];
 	toInt(): string | number;
 	trim(): string;
 	upper(): string;
 	val(): number;
-	values(): Array<string>;
+	values(): string[];
 
 	readonly [index: number]: string;
 }
@@ -39,7 +39,7 @@ interface Object {
 
 	hasIndex(key: PropertyKey): boolean
 	indexOf(value: any): any;
-	indexes<T extends PropertyKey>(): Array<T>;
+	indexes<T extends PropertyKey>(): T[];
 	pop(): any;
 	pull(): any;
 	push(key: PropertyKey): any;
@@ -47,7 +47,7 @@ interface Object {
 	replace(oldValue: any, newValue: any, maxCount?: number): any;
 	shuffle(): null;
 	sum(): number;
-	values(): Array<any>;
+	values(): any[];
 }
 
 interface ObjectConstructor {
@@ -68,22 +68,30 @@ interface ObjectConstructor {
 
 interface Array<T> {
 	readonly length: number; // In greyscript this was len()
-	concat(...arrays: Array<T>[]): Array<T> // Transpiler turns this into arr1 + arr2 + etc
 	hasIndex(index: number): boolean;
 	indexOf(value: T, offset?: number): number | null;
-	indexes(): Array<number>;
-	insert(index: number, value: T): Array<T>;
+	indexes(): number[];
+	insert(index: number, value: T): T[];
 	join(delimiter: string): string;
 	pop(): T;
 	pull(): T;
-	push(value: T): Array<T>;
+	push(value: T): T[];
 	remove(index: number): null;
-	replace(oldValue: T, newValue: T, maxCount?: number): Array<T>;
+	replace(oldValue: T, newValue: T, maxCount?: number): T[];
 	reverse(): null;
 	shuffle(): null;
-	sort(key: PropertyKey | null, ascending?: boolean): Array<T>;
+	sort(key: PropertyKey | null, ascending?: boolean): T[];
 	sum(): number;
-	values(): Array<T>;
+	values(): T[];
+	
+	// Custom ones
+
+	concat(...arrays: T[][]): T[] // Transpiler turns this into arr1 + arr2 + etc
+	map<U>(callbackfn: (value: T, index: number, array: T[]) => U): U[];
+	filter(predicate: (value: T, index: number, array: T[]) => unknown): T[];
+	find(predicate: (value: T, index: number, array: T[]) => unknown): T | null;
+	some(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
+	every(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
 
 	[n: number]: T;
 }
@@ -107,7 +115,7 @@ declare var Object: ObjectConstructor;
 
 declare var globals: Object & { [key: string]: unknown };
 /** The parameters given to this script on launch */
-declare var params: Array<string>;
+declare var params: string[];
 
 declare namespace GreyHack {
 	function abs(value: number): number;
@@ -159,7 +167,8 @@ declare namespace GreyHack {
 	function homeDir(): string;
 	function importCode(path: string): null;
 	function includeLib(path: string): LibTypes[keyof LibTypes] | null;
-	function isValidIp(ip: string): number;
+	function isLanIp(ip: string): boolean;
+	function isValidIp(ip: string): boolean;
 	function launchPath(): string;
 	function log(value: number, base?: number): number;
 	function mailLogin(user: string, pass: string): MetaMail | string | null;
@@ -169,7 +178,7 @@ declare namespace GreyHack {
 	function pi(): number;
 	function print(value: any, replaceText?: boolean): null;
 	function programPath(): string;
-	function range(start: number, end?: number, increment?: number): Array<number>;
+	function range(start: number, end?: number, increment?: number): number[];
 	function resetCtfPassword(newPassword: string): true | string;
 	function rnd(seed?: number): number;
 	function round(value: number, fixed?: number): number;
@@ -191,11 +200,9 @@ declare namespace GreyHack {
 	function isType<T extends keyof GameTypeMap>(value: any, type: T): value is GameTypeMap[T];
 	/** FOR TRANSPILER ONLY
 	 * 
-	 * Includes the given source to this position. If the file was already in the output then it will be ignored
+	 * Includes the given source to this position. If the file was already transpiled then this does nothing
 	 * 
-	 * Be careful to not have custom types in those files because the transpiler **will not** know about those
-	 * 
-	 * Can be a folder if you want to include them all 
+	 * Can be a folder if you want to include all the files inside 
 	 * @param file The absolute or relative path of the file */
 	function include(file: string): void;
 
@@ -230,7 +237,7 @@ declare namespace GreyHack {
 		getMinedCoins(): number | string;
 		getReward(): number | string;
 		getSubwallet(subwalletUser: string): SubWallet | string | null;
-		getSubwallets(): Array<SubWallet> | string;
+		getSubwallets(): SubWallet[] | string;
 		resetPassword(newPassword: string): true | string;
 		setAddress(address: string): true | string | null;
 		setCycleMining(rateHours: number): true | string | null;
@@ -247,7 +254,7 @@ declare namespace GreyHack {
 		decrypt(filePath: string, password: string): true | string | null;
 		encrypt(filePath: string, password: string): true | string | null;
 		isEncrypted(filePath: string): boolean | string | null;
-		smtpUserList(ip: string, port: number): Array<string> | string | null;
+		smtpUserList(ip: string, port: number): string[] | string | null;
 	}
 
 	interface CtfEvent {
@@ -264,7 +271,7 @@ declare namespace GreyHack {
 		applyPatch(path: string): string | null;
 		payload<T extends string | undefined>(memZone: string, filePath?: T): string | null | (T extends string ? [Partial<Computer>, Partial<File>, MetaLib] : [Partial<Computer>]);
 		scan(): string;
-		unitTesting(errorLines: Array<number>): string | null;
+		unitTesting(errorLines: number[]): string | null;
 	}
 
 	interface MetaLib {
@@ -279,7 +286,7 @@ declare namespace GreyHack {
 	interface MetaMail {
 		classID: "MetaMail";
 		delete(mailId: string): true | string | null;
-		fetch(): Array<string> | string;
+		fetch(): string[] | string;
 		read(mailId: string): string | null;
 		send(emailAddress: string, subject: string, message: string): string | true | null;
 	}
@@ -289,9 +296,9 @@ declare namespace GreyHack {
 		load(path: string): MetaLib | null;
 		netUse(ip: string, port: number): NetSession | null;
 		rshellClient(ip: string, port: number, processName?: string): true | string;
-		rshellServer(): Array<Shell> | string;
-		scan(metaLib: MetaLib): Array<string> | null;
-		scanAddresS(metaLib: MetaLib, memoryAddress: string): string | null;
+		rshellServer(): Shell[] | string;
+		scan(metaLib: MetaLib): string[] | null;
+		scanAddress(metaLib: MetaLib, memoryAddress: string): string | null;
 		sniffer(saveEncSource?: boolean): string | null;
 	}
 
@@ -308,7 +315,7 @@ declare namespace GreyHack {
 
 	interface Port {
 		classID: "port";
-		port_number: number;
+		portNumber: number;
 		isClosed: () => boolean;
 		getLanIp: () => string;
 	}
@@ -320,12 +327,12 @@ declare namespace GreyHack {
 		kernelVersion: string;
 		localIp: string;
 		publicIp: string;
-		devicePorts(ip: string): Array<Port> | string | null;
-		devicesLanIp(): Array<string>;
-		firewallRules(): Array<string>;
+		devicePorts(ip: string): Port[] | string | null;
+		devicesLanIp(): string[];
+		firewallRules(): string[];
 		pingPort(portNumber: number): Port | null;
 		portInfo(port: Port): string | null;
-		usedPorts(): Array<Port>;
+		usedPorts(): Port[];
 	}
 
 	interface Service {
@@ -371,8 +378,8 @@ declare namespace GreyHack {
 		getGlobalOffers(coinName: string): string | Record<string, [string, number, number]> | null;
 		getPendingTrade(coinName: string): string | Record<string, [string, number, number]> | null;
 		getPin(): string;
-		listCoins(): Array<string> | string;
-		listGlobalCoins(): Array<string> | string;
+		listCoins(): string[] | string;
+		listGlobalCoins(): string[] | string;
 		resetPassword(newPassword: string): true | string | null;
 		sellCoin(coinName: string, coinAmount: number, unitPrice: number, subwalletUser: string): true | string;
 		showNodes(coinName: string): string | number | null;
@@ -392,22 +399,22 @@ declare namespace GreyHack {
 		launch: (program: string, params?: string) => string | boolean;
 		ping: (ip: string) => string | boolean;
 		scp: (file: string, folder: string, remoteShell: Shell, isUpload?: boolean) => boolean | string | null;
-		startTerminal: () => null;
+		startTerminal: () => never;
 	}
 
 	interface FtpFile extends BaseFile {
 		classID: "ftpFile";
 		parent: FtpFile | null;
-		getFiles: () => Array<FtpFile> | null;
-		getFolders: () => Array<FtpFile> | null;
+		getFiles: () => FtpFile[] | null;
+		getFolders: () => FtpFile[] | null;
 	}
 
 	interface File extends BaseFile {
 		classID: "file";
 		parent: File | null;
 		allow_import: boolean;
-		getFiles: () => Array<File> | null;
-		getFolders: () => Array<File> | null;
+		getFiles: () => File[] | null;
+		getFolders: () => File[] | null;
 		chmod: (perms: string, recursive?: boolean) => string;
 		getContent: () => string | null;
 		setContent: (content: string) => string | boolean | null;
@@ -434,7 +441,7 @@ declare namespace GreyHack {
 		createUser: (username: string, password: string) => boolean | string | null;
 		deleteGroup: (username: string, group: string) => boolean | string | null;
 		deleteUser: (username: string, removeHome?: boolean) => boolean | string | null;
-		getPorts: () => Array<Port>;
+		getPorts: () => Port[];
 		groups: (username: string) => string | null;
 		isNetworkActive: () => boolean;
 		networkDevices: () => string;
@@ -442,7 +449,7 @@ declare namespace GreyHack {
 		reboot: (safeMode?: boolean) => boolean | string | null;
 		showProcs: () => string;
 		touch: (destFolder: string, fileName: string) => boolean | string;
-		wifiNetworks: (netDevice: netDevice) => Array<string> | null;
+		wifiNetworks: (netDevice: netDevice) => string[] | null;
 	}
 
 	interface BaseFile {
@@ -517,6 +524,7 @@ declare var hash: typeof GreyHack.hash;
 declare var homeDir: typeof GreyHack.homeDir;
 declare var importCode: typeof GreyHack.importCode;
 declare var includeLib: typeof GreyHack.includeLib;
+declare var isLanIp: typeof GreyHack.isLanIp;
 declare var isValidIp: typeof GreyHack.isValidIp;
 declare var launchPath: typeof GreyHack.launchPath;
 declare var log: typeof GreyHack.log;

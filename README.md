@@ -9,4 +9,4 @@ or
 This package contains type definitions for GreyHack's functions and objects. Also some extras for the transpiler
 
 ### Additional Details
- * Last updated: 2025-12-23
+ * Last updated: 2026-01-16

@@ -101,6 +101,26 @@ interface Function {
 
 }
 
+interface Math {
+	readonly PI: number;
+	readonly abs: typeof GreyHack.abs;
+	readonly acos: typeof GreyHack.acos;
+	readonly asin: typeof GreyHack.asin;
+	readonly atan: typeof GreyHack.atan;
+	readonly ceil: typeof GreyHack.ceil;
+	readonly floor: typeof GreyHack.floor;
+	readonly cos: typeof GreyHack.cos;
+	readonly sin: typeof GreyHack.sin;
+	readonly tan: typeof GreyHack.tan;
+	readonly sqrt: typeof GreyHack.sqrt;
+	readonly sign: typeof GreyHack.sign;
+	readonly round: typeof GreyHack.round;
+	readonly random: typeof GreyHack.rnd;
+	readonly log: typeof GreyHack.log; // Not quite the same
+	readonly min: (...values: number[]) => number;
+	readonly max: (...values: number[]) => number;
+}
+
 declare var String: {
 	new (value?: string): String;
 	(value?: any): string;
@@ -112,6 +132,7 @@ declare var Boolean: { readonly prototype: Number; };
 declare var Array: { readonly prototype: Array<any>; };
 declare var Function: { readonly prototype: Function; };
 declare var Object: ObjectConstructor;
+declare var Math: Math;
 
 declare var globals: Object & { [key: string]: unknown };
 /** The parameters given to this script on launch */
@@ -427,7 +448,6 @@ declare namespace GreyHack {
 		classID: "ftpComputer",
 	}
 
-	type netDevice = "wlan0" | "eth0";
 	interface Computer extends BaseComputer<File> {
 		classID: "computer";
 		localIp: string;
@@ -493,26 +513,19 @@ declare namespace GreyHack {
 
 declare type Computer = GreyHack.Computer
 
-declare var abs: typeof GreyHack.abs;
-declare var acos: typeof GreyHack.acos;
 declare var activeUser: typeof GreyHack.activeUser;
-declare var asin: typeof GreyHack.asin;
-declare var atan: typeof GreyHack.atan;
 declare var bitAnd: typeof GreyHack.bitAnd;
 declare var bitOr: typeof GreyHack.bitOr;
 declare var bitXor: typeof GreyHack.bitXor;
 declare var bitwise: typeof GreyHack.bitwise;
 declare var cd: typeof GreyHack.cd;
-declare var ceil: typeof GreyHack.ceil;
 declare var char: typeof GreyHack.char;
 declare var clearScreen: typeof GreyHack.clearScreen;
 declare var code: typeof GreyHack.code;
 declare var commandInfo: typeof GreyHack.commandInfo;
-declare var cos: typeof GreyHack.cos;
 declare var currentDate: typeof GreyHack.currentDate;
 declare var currentPath: typeof GreyHack.currentPath;
 declare var exit: typeof GreyHack.exit;
-declare var floor: typeof GreyHack.floor;
 declare var formatColumns: typeof GreyHack.formatColumns;
 declare var getAbsPath: typeof GreyHack.getAbsPath;
 declare var getCtf: typeof GreyHack.getCtf;
@@ -527,24 +540,16 @@ declare var includeLib: typeof GreyHack.includeLib;
 declare var isLanIp: typeof GreyHack.isLanIp;
 declare var isValidIp: typeof GreyHack.isValidIp;
 declare var launchPath: typeof GreyHack.launchPath;
-declare var log: typeof GreyHack.log;
 declare var mailLogin: typeof GreyHack.mailLogin;
 declare var md5: typeof GreyHack.md5;
 declare var nslookup: typeof GreyHack.nslookup;
 declare var parentPath: typeof GreyHack.parentPath;
-declare var pi: typeof GreyHack.pi;
 declare var print: typeof GreyHack.print;
 declare var programPath: typeof GreyHack.programPath;
 declare var range: typeof GreyHack.range;
 declare var resetCtfPassword: typeof GreyHack.resetCtfPassword;
-declare var rnd: typeof GreyHack.rnd;
-declare var round: typeof GreyHack.round;
-declare var sign: typeof GreyHack.sign;
-declare var sin: typeof GreyHack.sin;
 declare var slice: typeof GreyHack.slice;
-declare var sqrt: typeof GreyHack.sqrt;
 declare var str: typeof GreyHack.str;
-declare var tan: typeof GreyHack.tan;
 declare var time: typeof GreyHack.time;
 declare var userBankNumber: typeof GreyHack.userBankNumber;
 declare var userInput: typeof GreyHack.userInput;
@@ -557,6 +562,11 @@ declare const getType: typeof GreyHack.getType;
 declare const isType: typeof GreyHack.isType;
 
 declare const include: typeof GreyHack.include;
+
+type netDeviceNumbers = 0 | 1 | 2 | 3 | 4; // Maybe just let it be 'number'
+type wlanDevice = `wlan${netDeviceNumbers}`;
+type ethDevice = `eth${netDeviceNumbers}`;
+type netDevice = wlanDevice | ethDevice;
 
 type OtherTypeMap = {
 	"null": null,

@@ -2,7 +2,13 @@
 	"compilerOptions": {
 		"strict": true,
 		"noLib": true,
-		"skipLibCheck": false,
+		"skipLibCheck": true,
 		"noImplicitOverride": true,
-	}
+
+		"module": "none",
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"outFile": "dist/index.d.ts",
+	},
+	"include": ["src/**/*.ts"],
 }

@@ -25,6 +25,12 @@ interface String {
 	val(): number;
 	values(): string[];
 
+	// Extra
+	startsWith(searchString: string, position?: number): boolean;
+	endsWith(searchString: string, endPosition?: number): boolean;
+	repeat(count: number): string;
+	slice(start?: number, end?: number): string;
+
 	readonly [index: number]: string;
 }
 
@@ -73,9 +79,14 @@ interface Array<T> {
 	indexes(): number[];
 	insert(index: number, value: T): T[];
 	join(delimiter: string): string;
-	pop(): T;
-	pull(): T;
-	push(value: T): T[];
+	/** Removes the first element from an array and returns it. If the array is empty, null is returned. */
+	shift(): T | null;
+	/** Inserts new elements at the start of an array, and returns the new length of the array. */
+	unshift(...items: T[]): number;
+	/** Removes the last element from an array and returns it. If the array is empty, null is returned. */
+	pop(): T | null;
+	/** Appends new elements to the end of an array, and returns the new length of the array. */
+	push(...items: T[]): number;
 	remove(index: number): null;
 	replace(oldValue: T, newValue: T, maxCount?: number): T[];
 	reverse(): null;
@@ -86,12 +97,27 @@ interface Array<T> {
 
 	// Custom ones
 
-	concat(...items: (T | T[])[]): T[]; // Transpiler turns this into arr1 + arr2 + etc
+	/** Combines two or more arrays. This method returns a new array without modifying any existing arrays.
+	 * @param items Additional arrays and/or items to add to the end of the array.
+	 */
+	concat(...items: (T | T[])[]): T[];
+	/** Calls a defined callback function on each element of an array, and returns an array that contains the results. */
 	map<U>(callbackfn: (value: T, index: number, array: T[]) => U): U[];
+	/** Returns the elements of an array that meet the condition specified in a callback function. */
 	filter(predicate: (value: T, index: number, array: T[]) => unknown): T[];
+	/** Returns the value of the first element in the array where predicate is true, and null otherwise. */
 	find(predicate: (value: T, index: number, array: T[]) => unknown): T | null;
+	/** Determines whether the specified callback function returns true for any element of an array. */
 	some(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
+	/** Determines whether all the members of an array satisfy the specified test. */
 	every(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
+	/** Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array.
+	 * 
+	 * For example, -2 refers to the second to last element of the array. 
+	 * @param start The beginning index of the specified portion of the array. If start is undefined, then the slice begins at index 0. 
+	 * @param end The end index of the specified portion of the array. This is exclusive of the element at the index 'end'. If end is undefined, then the slice extends to the end of the array.
+	 * */
+	slice(start?: number, end?: number): T[];
 
 	[n: number]: T;
 }
@@ -102,13 +128,29 @@ interface Function {
 }
 
 declare var String: {
-	new(value?: string): String;
+	new(value?: any): String;
 	(value?: any): string;
 	readonly prototype: String;
 };
 
-declare var Number: { readonly prototype: Number; };
-declare var Boolean: { readonly prototype: Number; };
-declare var Array: { readonly prototype: Array<any>; };
-declare var Function: { readonly prototype: Function; };
+declare var Number: {
+	new(value?: any): Number;
+	(value?: any): number;
+	readonly prototype: Number;
+};
+
+declare var Boolean: {
+	new (value?: any): Boolean;
+	<T>(value?: T): boolean;
+	readonly prototype: Boolean;
+};
+
+declare var Array: {
+	readonly prototype: Array<any>; 
+};
+
+declare var Function: { 
+	readonly prototype: Function; 
+};
+
 declare var Object: ObjectConstructor;

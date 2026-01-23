@@ -47,11 +47,15 @@ interface String {
 	 */
 	slice(start?: number, end?: number): string;
 
+	/** Returns a string representation of a string. */
+	toString(): string;
+
 	readonly [index: number]: string;
 }
 
 interface Number {
-
+	/** Returns a string representation of a number. */
+	toString(): string;
 }
 
 type PropertyKey = number | string | symbol;
@@ -70,6 +74,9 @@ interface Object {
 	shuffle(): null;
 	sum(): number;
 	values(): any[];
+
+	/** Returns a string representation of an object. */
+	toString(): string;
 }
 
 interface ObjectConstructor {
@@ -141,12 +148,16 @@ interface Array<T> {
 	 * */
 	slice(start?: number, end?: number): T[];
 
+	/** Returns a string representation of an array. */
+	toString(): string;
+
 	[n: number]: T;
 }
 
 
 interface Function {
-
+	/** Returns a string representation of a function. */
+	toString(): string;
 }
 
 declare var String: {

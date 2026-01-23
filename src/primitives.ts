@@ -12,17 +12,81 @@ interface String {
 	indexOf(value: string, offset?: number): number | null;
 	indexes(): number[];
 	insert(index: number, value: string): string;
-	isMatch(pattern: string | RegExp, regexOptions?: string): number;
-	lastIndexOf(value: string): number;
-	lower(): string;
+
+	/**
+	 * Uses regular expression to check if a string matches a certain pattern.
+	 * 
+	 * If the pattern is empty, the provided {@link https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-options|regexOptions} are invalid, or if the regular expression times out, an error will be thrown, preventing further script execution.
+	 */
+	isMatch(pattern: string | RegExp, regexOptions?: string): boolean;
+
+	/** Returns the last occurrence of a substring in the string. */
+	lastIndexOf(searchString: string): number;
+
+	/** Converts all the alphabetic characters in a string to lowercase. */
+	toLowerCase(): string;
+
+	/** Converts all the alphabetic characters in a string to uppercase. */
+	toUpperCase(): string;
+
+	/**
+	 * Returns an object with all search results for the provided regular expression.
+	 * 
+	 * Each key contains the index and the value contains the matching string.
+	 * 
+	 * If the pattern is empty, the provided {@link https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-options|regexOptions} are invalid, or if the regular expression times out, an error will be thrown, preventing further script execution.
+	 */
 	matches(pattern: string | RegExp, regexOptions?: string): Record<number, string>;
+
+	/** 
+	 * Returns a new string with the provided value removed
+	 * @example
+	 * const myString = "I will not eat an ice cream!";
+	 * const newString = myString.remove("not ");
+	 * print(newString); // Prints "I will eat an ice cream!"
+	 */
 	remove(value: string): string;
+
+	/**
+	 * Returns a string with the replaced content by using regular expressions.
+	 * 
+	 * If the pattern is empty, the provided {@link https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-options|regexOptions} are invalid or if the regular expression times out, an error will be thrown, preventing further script execution.
+	 * 
+	 * @example
+	 * const myString = "I am now online";
+	 * const newString = myString.replace("online", "offline");
+	 * print(newString); // Prints "I am now offline"
+	 */
 	replace(pattern: string | RegExp, newValue: string, regexOptions?: string): string;
+
+	/**
+	 * Returns an array where each item is a segment of the string, separated by the provided separator string.
+	 * 
+	 * This method uses regular expressions for matching, so remember to escape special characters such as dots.
+	 * 
+	 * In case the pattern is empty, the provided {@link https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-options|regexOptions} are invalid, or the regular expression times out, an error will be thrown, preventing further script execution.
+	 * 
+	 * @example
+	 * const csvString = "cat,turtle,dog,mouse";
+	 * const animals = csvString.split(",");
+	 * print(animals); // Prints ["cat", "turtle", "dog", "mouse"]
+	 */
 	split(pattern: string | RegExp, regexOptions?: string): string[];
+
+	/**
+	 * Returns a number which is parsed from the string as an integer.
+	 * 
+	 * In case the string is not numeric it will return the original string.
+	 */
 	toInt(): string | number;
+
+	/** Removes the leading and trailing white space and line terminator characters from a string. */
 	trim(): string;
-	upper(): string;
+
+	/** Returns a number which is parsed from the string. In case the string is not numeric it will return a zero. */
 	val(): number;
+
+	/** Returns an array where each item is a string representing all available characters in the string. Could be compared to using {@link String.split|split} but with empty separator. */
 	values(): string[];
 
 	// Extra
@@ -84,6 +148,7 @@ interface ObjectConstructor {
 
 	readonly prototype: Object;
 
+	/** Determines whether an object has a property with the specified name. */
 	hasOwn<T extends PropertyKey, U = object>(o: U, key: T): o is (T extends keyof U ? U : U & { [K in T]: unknown });
 
 	/** Copy the properties of the source to the target */
@@ -92,30 +157,81 @@ interface ObjectConstructor {
 	assign<T extends {}, U, V, W>(target: T, source: U, source2: V, source3: W): T & U & V & W;
 	assign(target: object, ...sources: any[]): any;
 
+	/** Returns an array of keys of the object */
 	keys<T extends Record<any, any>>(o: T): (Exclude<keyof T, symbol>)[];
+
+	/** Returns an array of values of the object */
+	values<T extends Record<any, any>>(o: T): (T[keyof T])[];
 }
 
 interface Array<T> {
 	readonly length: number; // In greyscript this was len()
+
+	/** Returns a boolean indicating if the provided index exists in the array */
 	hasIndex(index: number): boolean;
+
+	/** Returns the index of the first occurrence of a value in an array, or null if it is not present. */
 	indexOf(value: T, offset?: number): number | null;
+
+	/** Returns an array containing the indexes of the array */
 	indexes(): number[];
+
+	/** Inserts a value into the array at the provided index. This method mutates the array and returns a reference to the same array. */
 	insert(index: number, value: T): T[];
+
+	/**
+	 * Returns a concatenated string containing all stringified values inside the list. These values will be separated via the provided separator.
+	 * 
+	 * In case the list exceeds `16777215L` items or the delimiter exceeds 128 characters, this method will throw an error, interrupting further script execution.
+	 */
 	join(delimiter: string): string;
+
 	/** Removes the first element from an array and returns it. If the array is empty, null is returned. */
 	shift(): T | null;
+
 	/** Inserts new elements at the start of an array, and returns the new length of the array. */
 	unshift(...items: T[]): number;
+
 	/** Removes the last element from an array and returns it. If the array is empty, null is returned. */
 	pop(): T | null;
+
 	/** Appends new elements to the end of an array, and returns the new length of the array. */
 	push(...items: T[]): number;
+
+	/**
+	 * Removes an item from the list with the provided index. Due to the removal the list will get mutated.
+	 */
 	remove(index: number): null;
+
+	/**
+	 * Changes every value of the array that matches `oldValue` into `newValue`
+	 * 
+	 * This method mutates the array and returns a reference to the same array.
+	 */
 	replace(oldValue: T, newValue: T, maxCount?: number): T[];
-	reverse(): null;
+
+	/** Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array. */
+	reverse(): T;
+
+	/** Shuffles all values in the array. This method mutates the array. */
 	shuffle(): null;
-	sort(key: PropertyKey | null, ascending?: boolean): T[];
+
+	/** 
+	 * Sorts the values of an array alphanumerically.
+	 * 
+	 * This operation mutates the original array. Optionally, a key can be provided, which is used if the items are objects or arrays. Finally, this method returns the updated array.
+	 * @example
+	 * const myArray = [{ key: 123 }, { key: 5 }, { key: 17 }];
+	 * myArray.sort("key");
+	 * 
+	 * const numbers = [1,2,3,4,5];
+	 * numbers.sort()
+	 */
+	sort(key?: PropertyKey | null, ascending?: boolean): T[];
+
+	/** Returns a sum of all values inside the array. Any non-numeric values will be considered a zero. */
 	sum(): number;
+
 	values(): T[];
 
 	// Custom ones
@@ -124,7 +240,7 @@ interface Array<T> {
 	 * @param items Additional arrays and/or items to add to the end of the array.
 	 */
 	concat(...items: (T | T[])[]): T[];
-	
+
 	/** Calls a defined callback function on each element of an array, and returns an array that contains the results. */
 	map<U>(callbackfn: (value: T, index: number, array: T[]) => U): U[];
 
@@ -173,17 +289,17 @@ declare var Number: {
 };
 
 declare var Boolean: {
-	new (value?: any): Boolean;
+	new(value?: any): Boolean;
 	<T>(value?: T): boolean;
 	readonly prototype: Boolean;
 };
 
 declare var Array: {
-	readonly prototype: Array<any>; 
+	readonly prototype: Array<any>;
 };
 
-declare var Function: { 
-	readonly prototype: Function; 
+declare var Function: {
+	readonly prototype: Function;
 };
 
 declare var Object: ObjectConstructor;

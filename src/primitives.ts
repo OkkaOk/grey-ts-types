@@ -26,9 +26,25 @@ interface String {
 	values(): string[];
 
 	// Extra
+
+	/** Returns true if this string starts with the searchString. Otherwise returns false. */
 	startsWith(searchString: string, position?: number): boolean;
+
+	/** Returns true if this string ends with the searchString. Otherwise returns false. */
 	endsWith(searchString: string, endPosition?: number): boolean;
+
+	/**
+	 * Returns a string value that is made from count copies appended together.
+	 * 
+	 * If count is 0, the empty string is returned.
+	 */
 	repeat(count: number): string;
+
+	/**
+	 * Returns a section of a string.
+	 * @param start The index to the beginning of the specified portion of string. 
+	 * @param end The index to the end of the specified portion of string. The substring includes the characters up to, but not including, the character indicated by end. If this value is not specified, the substring continues to the end of string.
+	 */
 	slice(start?: number, end?: number): string;
 
 	readonly [index: number]: string;
@@ -101,16 +117,22 @@ interface Array<T> {
 	 * @param items Additional arrays and/or items to add to the end of the array.
 	 */
 	concat(...items: (T | T[])[]): T[];
+	
 	/** Calls a defined callback function on each element of an array, and returns an array that contains the results. */
 	map<U>(callbackfn: (value: T, index: number, array: T[]) => U): U[];
+
 	/** Returns the elements of an array that meet the condition specified in a callback function. */
 	filter(predicate: (value: T, index: number, array: T[]) => unknown): T[];
+
 	/** Returns the value of the first element in the array where predicate is true, and null otherwise. */
 	find(predicate: (value: T, index: number, array: T[]) => unknown): T | null;
+
 	/** Determines whether the specified callback function returns true for any element of an array. */
 	some(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
+
 	/** Determines whether all the members of an array satisfy the specified test. */
 	every(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
+
 	/** Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array.
 	 * 
 	 * For example, -2 refers to the second to last element of the array. 

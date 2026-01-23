@@ -310,12 +310,18 @@ declare namespace GreyHack {
 	 */
 	function isType<T extends keyof GameTypeMap>(value: any, type: T): value is GameTypeMap[T];
 
-	/** FOR TRANSPILER ONLY
+	/**
+	 * FOR TRANSPILER ONLY
 	 * 
 	 * Includes the given source to this position. If the file was already transpiled then this does nothing
 	 * 
-	 * Can be a folder if you want to include all the files inside 
-	 * @param file The absolute or relative path of the file */
+	 * Can be a folder if you want to include all the files inside
+	 * 
+	 * @param file The absolute or relative path of the file
+	 * 
+	 * @example
+	 * include("./commands");
+	 */
 	function include(file: string): void;
 
 	type LibTypes = {

@@ -4,6 +4,7 @@ declare namespace GreyHack {
 
 		/** Returns the hostname of the machine. */
 		getName: () => string;
+
 		/**
 		 * Creates a folder at the path provided in the arguments.
 		 * 
@@ -23,6 +24,12 @@ declare namespace GreyHack {
 		 * If the provided path cannot be resolved, meaning that no file or folder exists, this method will return null.
 		 * 
 		 * Providing an empty string for the path will result in an error, interrupting the script execution.
+		 * @example
+		 * const computer = getShell().hostComputer;
+		 * const passwd = computer.file("/etc/passwd");
+		 * if (passwd) {
+		 * 	print(`Content of passwd file\n${passwd.getContent()}`)
+		 * }
 		 */
 		file: (path: string) => FileType | null;
 	}

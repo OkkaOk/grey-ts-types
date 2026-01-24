@@ -231,3 +231,8 @@ declare namespace GreyHack {
 		startTerminal: () => never;
 	}
 }
+
+declare const console: {
+	readonly log: typeof GreyHack.print;
+	readonly clear: typeof GreyHack.clearScreen;
+}

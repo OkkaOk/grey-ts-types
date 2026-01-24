@@ -94,10 +94,10 @@ declare namespace GreyHack {
 		portNumber: number;
 
 		/** Returns a boolean, where true indicates that the specified port is closed and false indicates that the port is open. */
-		isClosed: () => boolean;
+		isClosed(): boolean;
 
 		/** Returns a string containing the local IP address of the computer to which the port is pointing. */
-		getLanIp: () => string;
+		getLanIp(): string;
 	}
 
 	interface Router {
@@ -179,7 +179,7 @@ declare namespace GreyHack {
 		 * 
 		 * In case any provided values deviate from the defined signature a runtime exception will be thrown.
 		 */
-		build: (sourcePath: string, binaryPath: string, allowImport?: boolean) => string;
+		build(sourcePath: string, binaryPath: string, allowImport?: boolean): string;
 
 		/**
 		 * Returns a shell if the connection attempt to the provided IP was successful.
@@ -188,7 +188,7 @@ declare namespace GreyHack {
 		 * 
 		 * In case of failure, a string is returned containing details. If this method is run in an SSH encryption process, or if the computer is not connected to the internet, a runtime exception will be thrown.
 		 */
-		connectService: (ip: string, port: number, user: string, password: string, service?: "ssh" | "ftp") => Shell | FtpShell | string | null;
+		connectService(ip: string, port: number, user: string, password: string, service?: "ssh" | "ftp"): Shell | FtpShell | string | null;
 
 		/**
 		 * Launches the binary located at the provided path. 
@@ -201,14 +201,14 @@ declare namespace GreyHack {
 		 * 
 		 * There is a cooldown of 2 seconds between launches to prevent abuse. If you attempt to launch a script during this cooldown period, the method will return false.
 		 */
-		launch: (program: string, params?: string) => string | boolean;
+		launch(program: string, params?: string): string | boolean;
 
 		/**
 		 * Pings an IP address. 
 		 * 
 		 * Return a boolean indicating if the remote address could be reached. Firewalls do not block ping requests. Passing an invalid ip will cause the method to return a string with an error message.
 		 */
-		ping: (ip: string) => string | boolean;
+		ping(ip: string): string | boolean;
 
 		/**
 		 * Send a file to the computer related to the provided shell.
@@ -219,7 +219,7 @@ declare namespace GreyHack {
 		 * 
 		 * In case of failure, this method will return a string with the cause. Otherwise, true will be returned. In case the string for sourceFile or destinationFolder is empty, an error will be thrown, preventing further script execution. Utilizing this method in an SSH encryption process will trigger an error, halting further script execution.
 		 */
-		scp: (file: string, folder: string, remoteShell: Shell, isUpload?: boolean) => boolean | string;
+		scp(file: string, folder: string, remoteShell: Shell, isUpload?: boolean): boolean | string;
 		
 		/**
 		 * Launches an active terminal.
@@ -228,7 +228,7 @@ declare namespace GreyHack {
 		 * 
 		 * Using this method within an SSH encryption process will cause an error to be thrown, preventing further script execution.
 		 */
-		startTerminal: () => never;
+		startTerminal(): never;
 	}
 }
 

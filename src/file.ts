@@ -1,40 +1,48 @@
 declare namespace GreyHack {
 	interface FtpFile extends BaseFile {
 		classID: "ftpFile";
+
 		/** The parent folder of the current file or folder */
 		parent: FtpFile | null;
+
 		/**
 		 * Returns an array of files inside this folder.
 		 * 
 		 * In case the current entity is a file instead of a folder this method will return null, so it is advisable to first use the isFolder function before calling this method. In case the current folder gets deleted this method will return null as well.
 		 */
-		getFiles: () => FtpFile[] | null;
+		getFiles(): FtpFile[] | null;
+
 		/**
 		 * Returns an array of folders inside this folder.
 		 * 
 		 * In case the current entity is a file instead of a folder this method will return null, so it is advisable to first use the isFolder function before calling this method. In case the current folder gets deleted this method will return null as well.
 		 */
-		getFolders: () => FtpFile[] | null;
+		getFolders(): FtpFile[] | null;
 	}
 
 	interface File extends BaseFile {
 		classID: "file";
+
 		/** The parent folder of the current file or folder */
 		parent: File | null;
+
 		/** Indicates if the file is a binary and can be imported by other scripts */
 		allowImport: boolean;
+
 		/**
 		 * Returns an array of files inside this folder.
 		 * 
 		 * In case the current entity is a file instead of a folder this method will return null, so it is advisable to first use the isFolder function before calling this method. In case the current folder gets deleted this method will return null as well.
 		 */
-		getFiles: () => File[] | null;
+		getFiles(): File[] | null;
+
 		/**
 		 * Returns an array of folders inside this folder.
 		 * 
 		 * In case the current entity is a file instead of a folder this method will return null, so it is advisable to first use the isFolder function before calling this method. In case the current folder gets deleted this method will return null as well.
 		 */
-		getFolders: () => File[] | null;
+		getFolders(): File[] | null;
+
 		/**
 		 * Modifies the file permissions.
 		 * 
@@ -44,7 +52,8 @@ declare namespace GreyHack {
 		 * 
 		 * @param recursive set the permissions recursively to every file inside this folder
 		 */
-		chmod: (perms: string, recursive?: boolean) => string;
+		chmod(perms: string, recursive?: boolean): string;
+
 		/**
 		 * Returns a string representing the content of the file. To read a file, the user requires read access or being root.
 		 * 
@@ -52,7 +61,8 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, an error will be thrown, preventing any further script execution.
 		 */
-		getContent: () => string | null;
+		getContent(): string | null;
+
 		/**
 		 * Saves text into a file. The content will not get appended to the file; therefore, existing content will be overridden.
 		 * 
@@ -60,7 +70,8 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, an error will be thrown, preventing any further script execution. If the permissions are lacking, this method will return false. In case the file gets deleted this method will return null.
 		 */
-		setContent: (content: string) => string | boolean | null;
+		setContent(content: string): string | boolean | null;
+
 		/**
 		 * Change the group related to this file.
 		 * 
@@ -70,7 +81,8 @@ declare namespace GreyHack {
 		 * 
 		 * @param recursive set the group recursively to every file inside this folder
 		 */
-		setGroup: (group: string, recursive?: boolean) => string | null;
+		setGroup(group: string, recursive?: boolean): string | null;
+
 		/**
 		 * Change the owner of this file.
 		 * 
@@ -80,7 +92,8 @@ declare namespace GreyHack {
 		 * 
 		 * @param recursive set the owner recursively to every file inside this folder
 		 */
-		setOwner: (owner: string, recursive?: boolean) => string | null;
+		setOwner(owner: string, recursive?: boolean): string | null;
+
 		/**
 		 * Creates a symlink to the specified path.
 		 * 
@@ -88,18 +101,16 @@ declare namespace GreyHack {
 		 * 
 		 * If used within an SSH encryption process, if the new name exceeds 128 characters, or if the path is too long, an error will be thrown, interrupting script execution. If the current file is deleted, this method will return null.
 		 */
-		symlink: (path: string, newName?: string) => true | string | null;
+		symlink(path: string, newName?: string): true | string | null;
 	}
 
 	interface BaseFile {
 		classID: "ftpFile" | "file";
 
 		/** The name of the file. Is null if the file gets deleted before accessing this */
-
 		name: string | null;
 
 		/** The name of the group this file belongs to. Is null if the file gets deleted before accessing this */
-
 		group: string | null;
 
 		/** The name of the file owner. Is null if the file gets deleted before accessing this */
@@ -126,7 +137,7 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, the new name exceeds 128 characters, or the path is too long, an error will be thrown, causing an interruption of script execution. In case the current file gets deleted, this method will return null.
 		 */
-		copy: (destFolder?: string, newName?: string) => string | boolean | null;
+		copy(destFolder?: string, newName?: string): string | boolean | null;
 
 		/**
 		 * Delete the current file.
@@ -135,22 +146,22 @@ declare namespace GreyHack {
 		 * 
 		 * Note that deleting a file will leave a log entry.
 		 */
-		delete: () => string;
+		delete(): string;
 
 		/** Returns a boolean indicating if the user who launched the script has the requested permissions.
 		 * 
 		 * In case the file gets deleted, this method will return null instead.
 		 */
-		hasPermission: (perms: "r" | "w" | "x") => boolean | null;
+		hasPermission(perms: "r" | "w" | "x"): boolean | null;
 
 		/** Returns a boolean indicating if the file is a binary. Returns null if the file gets deleted */
-		isBinary: () => boolean | null;
+		isBinary(): boolean | null;
 
 		/** Returns a boolean indicating if the file is a folder. Returns null if the file gets deleted */
-		isFolder: () => boolean | null;
+		isFolder(): boolean | null;
 
 		/** Returns a boolean indicating if the file is a symlink. Returns null if the file gets deleted */
-		isSymlink: () => boolean | null;
+		isSymlink(): boolean | null;
 
 		/**
 		 * Moves the file to the provided path.
@@ -159,13 +170,13 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, the new name exceeds 128 characters, or the path is too long, an error will be thrown, causing an interruption of script execution. In case the current file gets deleted, this method will return null.
 		 */
-		move: (destFolder: string, newName?: string) => string | boolean | null;
+		move(destFolder: string, newName?: string): string | boolean | null;
 
 		/**
 		 * Returns a string containing the file path. If the file has been deleted, this method will still return the path it had prior to deletion.
 		 * @param symLinkOriginalPath return the original path of the linked file instead
 		 */
-		path: (symLinkOriginalPath?: boolean) => string;
+		path(symLinkOriginalPath?: boolean): string;
 
 		/**
 		 * Rename the file with the name provided.
@@ -174,6 +185,6 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, an error will be thrown, causing the script execution to be interrupted.
 		 */
-		rename: (name: string) => string;
+		rename(name: string): string;
 	}
 }

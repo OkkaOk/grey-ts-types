@@ -297,7 +297,7 @@ declare namespace GreyHack {
 	function yield(): null;
 
 	/** Returns the type of the object */
-	function getType(value: any): keyof GameTypeMap;
+	function getType(value: any): string;
 
 	/** Checks if the given object is of a specific type
 	 * @example
@@ -324,7 +324,7 @@ declare namespace GreyHack {
 	 */
 	function include(file: string): void;
 
-	type LibTypes = {
+	interface LibTypes {
 		"aptclient.so": GreyHack.AptClient,
 		"metaxploit.so": GreyHack.Metaxploit,
 		"crypto.so": GreyHack.Crypto,
@@ -387,11 +387,8 @@ declare const isType: typeof GreyHack.isType;
 
 declare const include: typeof GreyHack.include;
 
-type OtherTypeMap = {
+interface PrimitiveTypeMap {
 	"null": null,
-	"pcomputer": unknown,
-	"pfile": unknown,
-	"prouter": unknown,
 	"number": number,
 	"list": Array<any>,
 	"map": Record<string, any>,
@@ -399,7 +396,10 @@ type OtherTypeMap = {
 	"string": string,
 };
 
-type ClassIDMap = {
+interface ClassIDMap {
+	"pcomputer": unknown,
+	"pfile": unknown,
+	"prouter": unknown,
 	"aptClientLib": GreyHack.AptClient,
 	"blockChainLib": GreyHack.BlockChain,
 	"ctfEvent": GreyHack.CtfEvent,
@@ -425,4 +425,4 @@ type ClassIDMap = {
 	"wallet": GreyHack.Wallet;
 };
 
-type GameTypeMap = ClassIDMap & OtherTypeMap;
+type GameTypeMap = ClassIDMap & PrimitiveTypeMap;

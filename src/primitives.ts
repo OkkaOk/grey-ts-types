@@ -280,6 +280,9 @@ interface Array<T> {
 
 	// Custom ones
 
+	/** Determines whether an array includes a certain element, returning true or false as appropriate. */
+	includes(searchElement: T, fromIndex?: number): boolean
+
 	/**
 	 * Combines two or more arrays. This method returns a new array without modifying any existing arrays.
 	 * @param items Additional arrays and/or items to add to the end of the array.
@@ -309,6 +312,15 @@ interface Array<T> {
 	 * @param end The end index of the specified portion of the array. This is exclusive of the element at the index 'end'. If end is undefined, then the slice extends to the end of the array.
 	 * */
 	slice(start?: number, end?: number): T[];
+
+	/**
+	 * Removes elements from an array and returns the deleted elements.
+	 * 
+	 * For example, -2 refers to the second to last element of the array. 
+	 * @param start  The zero-based location in the array from which to start removing elements 
+	 * @param end The number of elements to remove. Omitting this argument will remove all elements from the start paramater location to end of the array.
+	 * */
+	splice(start: number, deleteCount?: number): T[];
 
 	/** Returns a string representation of an array. */
 	toString(): string;

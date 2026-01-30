@@ -136,6 +136,12 @@ interface String {
 interface Number {
 	/** Returns a string representation of a number. */
 	toString(): string;
+
+	/**
+	 * Returns a string representing a number in fixed-point notation.
+	 * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
+	 */
+	toFixed(fractionDigits?: number): string
 }
 
 type PropertyKey = number | string | symbol;

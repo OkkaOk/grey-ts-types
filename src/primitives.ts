@@ -82,7 +82,7 @@ interface String {
 	 */
 	toInt(): string | number;
 
-	/** Removes the leading and trailing white space and line terminator characters from a string. */
+	/** Removes the leading and trailing white space characters from a string. */
 	trim(): string;
 
 	/** Returns a number which is parsed from the string. In case the string is not numeric it will return a zero. */
@@ -92,6 +92,20 @@ interface String {
 	values(): string[];
 
 	// Extra
+
+	/** Removes the leading white space characters from a string. */
+	trimStart(): string;
+
+	/** Removes the trailing white space characters from a string. */
+	trimEnd(): string;
+
+	/**
+	 * Returns true if searchString appears as a substring of this string, at one or more positions that are greater than or equal to position; otherwise, returns false.
+	 * 
+	 * @param searchString search string
+	 * @param position If position is undefined, 0 is assumed, so as to search all of the string.
+	 */
+	includes(searchString: string, position?: number): boolean;
 
 	/** Returns true if this string starts with the searchString. Otherwise returns false. */
 	startsWith(searchString: string, position?: number): boolean;
@@ -266,7 +280,8 @@ interface Array<T> {
 
 	// Custom ones
 
-	/** Combines two or more arrays. This method returns a new array without modifying any existing arrays.
+	/**
+	 * Combines two or more arrays. This method returns a new array without modifying any existing arrays.
 	 * @param items Additional arrays and/or items to add to the end of the array.
 	 */
 	concat(...items: (T | T[])[]): T[];
@@ -286,7 +301,8 @@ interface Array<T> {
 	/** Determines whether all the members of an array satisfy the specified test. */
 	every(predicate: (value: T, index: number, array: T[]) => unknown): boolean;
 
-	/** Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array.
+	/**
+	 * Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array.
 	 * 
 	 * For example, -2 refers to the second to last element of the array. 
 	 * @param start The beginning index of the specified portion of the array. If start is undefined, then the slice begins at index 0. 

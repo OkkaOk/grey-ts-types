@@ -141,7 +141,7 @@ interface Number {
 	 * Returns a string representing a number in fixed-point notation.
 	 * @param fractionDigits Number of digits after the decimal point.
 	 */
-	toFixed(fractionDigits?: number): string
+	toFixed(fractionDigits?: number): string;
 }
 
 type PropertyKey = number | string | symbol;
@@ -286,8 +286,18 @@ interface Array<T> {
 
 	// Custom ones
 
+	/**
+	* Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
+	* @param value value to fill array section with
+	* @param start index to start filling the array at. If start is negative, it is treated as
+	* length+start where length is the length of the array.
+	* @param end index to stop filling the array at. If end is negative, it is treated as
+	* length+end.
+	*/
+	fill(value: T, start?: number, end?: number): this;
+
 	/** Determines whether an array includes a certain element, returning true or false as appropriate. */
-	includes(searchElement: T, fromIndex?: number): boolean
+	includes(searchElement: T, fromIndex?: number): boolean;
 
 	/**
 	 * Combines two or more arrays. This method returns a new array without modifying any existing arrays.

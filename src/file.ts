@@ -101,7 +101,7 @@ declare namespace GreyHack {
 		 * 
 		 * If used within an SSH encryption process, if the new name exceeds 128 characters, or if the path is too long, an error will be thrown, interrupting script execution. If the current file is deleted, this method will return null.
 		 */
-		symlink(path: string, newName?: string): true | string | null;
+		symlink(path: string, newName: string): true | string | null;
 	}
 
 	interface BaseFile {
@@ -137,7 +137,7 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, the new name exceeds 128 characters, or the path is too long, an error will be thrown, causing an interruption of script execution. In case the current file gets deleted, this method will return null.
 		 */
-		copy(destFolder?: string, newName?: string): string | true | null;
+		copy(destFolder: string, newName: string): string | true | null;
 
 		/**
 		 * Delete the current file.
@@ -171,7 +171,7 @@ declare namespace GreyHack {
 		 * 
 		 * If this method is used within an SSH encryption process, the new name exceeds 128 characters, or the path is too long, an error will be thrown, causing an interruption of script execution. In case the current file gets deleted, this method will return null.
 		 */
-		move(destFolder: string, newName?: string): string | true | null;
+		move(destFolder: string, newName: string): string | true | null;
 
 		/**
 		 * Returns a string containing the file path. If the file has been deleted, this method will still return the path it had prior to deletion.

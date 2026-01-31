@@ -258,7 +258,7 @@ declare namespace GreyHack {
 
 		/** Checks whether the specified file is encrypted. 
 		 * 
-		 * Returns true if the file is encrypted, or zero if it is not. If the check fails (e.g., due to a missing or unreadable file), a descriptive error message is returned as a string. */
+		 * Returns true if the file is encrypted, or false if it is not. If the check fails (e.g., due to a missing or unreadable file), a descriptive error message is returned as a string. */
 		isEncrypted(filePath: string): boolean | string;
 
 		/** Returns an array of the existing users on the computer where the SMTP service is running. 

@@ -57,7 +57,7 @@ declare namespace GreyHack {
 		 * 
 		 * If the provided username is empty, an error will be thrown, preventing any further script execution.
 		 */
-		changePassword(username: string, password: string): boolean | string;
+		changePassword(username: string, password: string): true | string;
 
 		/**
 		 * Closes a program associated with the provided PID.

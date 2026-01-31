@@ -219,7 +219,7 @@ declare namespace GreyHack {
 		 * 
 		 * In case of failure, this method will return a string with the cause. Otherwise, true will be returned. In case the string for sourceFile or destinationFolder is empty, an error will be thrown, preventing further script execution. Utilizing this method in an SSH encryption process will trigger an error, halting further script execution.
 		 */
-		scp(file: string, folder: string, remoteShell: Shell, isUpload?: boolean): boolean | string;
+		scp(file: string, folder: string, remoteShell: Shell, isUpload?: boolean): true | string;
 		
 		/**
 		 * Launches an active terminal.

@@ -57,6 +57,25 @@ declare namespace GreyHack {
 		 * Computer exploits return a computer object when successful or false if the LAN IP is invalid, the computer doesn't exist, or no non-root user is available. 
 		 * 
 		 * Using {@link isType} or {@link getType} to verify return value types is essential before processing results due to the variety of possible return types.
+		 * 
+		 * @example
+		 * const metax = includeLib("/lib/metaxploit.so");
+		 * if (!isType(metax, "MetaxploitLib")) exit("Failed to get metaxploit");
+		 * 
+		 * const metaLib = metax.load("/lib/init.so");
+		 * if (!metaLib) exit("Failed to load the library");
+		 * 
+		 * const result = metaLib.overflow("0x14F45286", "Eyworde");
+		 * if (isType(result, "shell")) {
+		 * 	// Do stuff with shell
+		 * }
+		 * else if (isType(result, "computer")) {
+		 * 	// Do stuff with computer
+		 * }
+		 * else if (isType(result, "file")) {
+		 * 	// Do stuff with file
+		 * 	console.log("Obtained file: " + result.name);
+		 * }
 		 */
 		overflow(memoryAddress: string, unsecZone: string, optArgs?: string): Shell | Computer | File | string | boolean | null;
 	}

@@ -6,6 +6,15 @@ declare namespace GreyHack {
 		 * Inserts a repository address into the `/etc/apt/sources.txt` file.
 		 * 
 		 * On success, it will return an empty string. In case of failure, it will return a string with an error message.
+		 * @example
+		 * const aptClient = includeLib("/lib/aptclient.so");
+		 * if (!isType(aptClient, "aptClientLib")) exit("Failed to find aptclient.");
+		 * 
+		 * const failString = aptClient.addRepo("42.141.12.6");
+		 * if (failString)
+		 * 	console.log("Failed to add repo: " + failString);
+		 * else
+		 * 	console.log("Added repo successfully!");
 		*/
 		addRepo(repositoryAddress: string, port?: number): string;
 

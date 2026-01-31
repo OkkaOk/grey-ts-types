@@ -114,9 +114,10 @@ declare namespace GreyHack {
 	 * 
 	 * Using this method in a SSH encryption process will cause an error to be thrown preventing further script execution.
 	 */
-	function getCustomObject<T=object>(): T & Record<string, any>;
+	function getCustomObject<T = object>(): T & Record<string, any>;
 
-	/** Returns by default the {@link Router router} to which the executing computer is connected to. 
+	/**
+	 * Returns by default the {@link Router router} to which the executing computer is connected to. 
 	 * 
 	 * Optionally an IP address can be provided. In case of failure `null` is returned. 
 	 * 
@@ -140,7 +141,8 @@ declare namespace GreyHack {
 	function getShell(): Shell;
 	function getShell(username?: string, password?: string): Shell | null;
 
-	/** Returns the switch on the local network whose IP address matches
+	/**
+	 * Returns the switch on the local network whose IP address matches
 	 * @example
 	 * const switch = getSwitch("192.168.1.4");
 	 * if (switch) print("This device is a switch!");
@@ -299,7 +301,8 @@ declare namespace GreyHack {
 	/** Returns the type of the object */
 	function getType(value: any): string;
 
-	/** Checks if the given object is of a specific type
+	/**
+	 * Checks if the given object is of a specific type
 	 * @example
 	 * const metax = includeLib("/lib/metaxploit.so");
 	 * if (isType(metax, "MetaxploitLib")) {

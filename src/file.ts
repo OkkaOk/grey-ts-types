@@ -148,7 +148,8 @@ declare namespace GreyHack {
 		 */
 		delete(): string;
 
-		/** Returns a boolean indicating if the user who launched the script has the requested permissions.
+		/**
+		 * Returns a boolean indicating if the user who launched the script has the requested permissions.
 		 * 
 		 * In case the file gets deleted, this method will return null instead.
 		 */

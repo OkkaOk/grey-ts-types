@@ -121,7 +121,8 @@ declare namespace GreyHack {
 		/**
 		 * Returns an array where each item is an open port related to the device of the provided LAN IP address. The device needs to be within the network of the router.
 		 * 
-		 * In case of failure, this method will return null or a string with details. In case an empty ip is provided this method will throw a runtime exception. */
+		 * In case of failure, this method will return null or a string with details. In case an empty ip is provided this method will throw a runtime exception. 
+		 */
 		devicePorts(ip: string): Port[] | string | null;
 
 		/** 

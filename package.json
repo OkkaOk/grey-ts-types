@@ -1,6 +1,6 @@
 {
 	"name": "@grey-ts/types",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "TypeScript definitions for GreyHack's functions and objects",
 	"license": "MIT",
 	"types": "dist/index.d.ts",

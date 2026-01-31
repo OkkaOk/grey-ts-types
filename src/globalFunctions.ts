@@ -5,6 +5,11 @@ declare var globals: any;
 /** The parameters given to this script on launch */
 declare var params: string[];
 
+declare const console: {
+	readonly log: typeof GreyHack.print;
+	readonly clear: typeof GreyHack.clearScreen;
+}
+
 declare namespace GreyHack {
 	/** Returns a string with the name of the user who is executing the current script. */
 	function activeUser(): string;

@@ -58,7 +58,7 @@ interface Array<T> {
 	 * const myArray = [{ key: 123 }, { key: 5 }, { key: 17 }];
 	 * myArray.sort("key");
 	 * 
-	 * const numbers = [1,2,3,4,5];
+	 * const numbers = [4,2,6,3,1,7,5];
 	 * numbers.sort()
 	 */
 	sort(key?: PropertyKey | null, ascending?: boolean): T[];

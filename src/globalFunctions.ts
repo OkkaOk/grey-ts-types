@@ -138,14 +138,13 @@ declare namespace GreyHack {
 	 * 
 	 * Optionally, a username and password can be provided, allowing the use of a shell with other user privileges. 
 	 * 
-	 * If the username or password does not match an existing user or if the provided values deviate from the defined signature, this method will return `null`.
+	 * If the username or password does not match an existing user, this method will return `null`.
 	 * @example
 	 * const shell = getShell("root", "test");
 	 * print("My public IP is: " + shell.hostComputer.publicIp);
 	 */
 	function getShell(): Shell;
-	function getShell(username?: string, password?: string): Shell | null;
-
+	function getShell(username: string, password: string): Shell | null;
 	/**
 	 * Returns the switch on the local network whose IP address matches
 	 * @example

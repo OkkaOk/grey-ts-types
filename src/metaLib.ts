@@ -19,13 +19,12 @@ declare namespace GreyHack {
 		/** 
 		 * Returns by default a boolean indicating whether the library has been patched. 
 		 * 
-		 * True indicates that the library has been patched, while false indicates that it has not. 
-		 * 
 		 * If the getdate parameter is set to true, the function will return a string containing the date of the last patch. The data format is as follows: `dd/MM/yyyy`. 
 		 * 
 		 * Additionally if there is any error the return value will be a string.
 		 */
-		isPatched(getDate?: boolean): boolean | string;
+		isPatched(getDate?: false): boolean | string;
+		isPatched(getDate: true): string;
 
 		/**
 		 * Exploits vulnerabilities in target systems by executing various attack vectors against libraries located in the `/lib` folder. 

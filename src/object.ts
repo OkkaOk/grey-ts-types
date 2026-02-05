@@ -18,7 +18,7 @@ interface ObjectConstructor {
 	 * @example
 	 * const myObject = { test: 123, other: 222 };
 	 * const key = Object.indexOf(myObject, 222);
-	 * print(key); // Prints "other"
+	 * console.log(key); // Prints "other"
 	 */
 	indexOf<T extends Record<any, any>>(o: T, value: T[keyof T]): keyof T | null;
 
@@ -50,7 +50,7 @@ interface ObjectConstructor {
 	 * @example
 	 * const myObject = { status: "online" };
 	 * Object.replace(myObject, "online", "offline");
-	 * print(myObject); // Prints { "status": "offline" };
+	 * console.log(myObject); // Prints { "status": "offline" };
 	 */
 	replace<T extends Record<any, any>>(o: T, oldValue: T[keyof T], newValue: T[keyof T], maxCount?: number): T;
 

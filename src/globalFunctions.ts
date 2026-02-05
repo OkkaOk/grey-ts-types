@@ -117,7 +117,7 @@ declare namespace GreyHack {
 	 * If there is no active internet connection, this method will throw an error, interrupting further script execution.
 	 * @example
 	 * const router = getRouter();
-	 * print("Router's essid name is: " + router.essidName);
+	 * console.log("Router's essid name is: " + router.essidName);
 	 */
 	function getRouter(ip?: string): Router | null;
 
@@ -129,7 +129,7 @@ declare namespace GreyHack {
 	 * If the username or password does not match an existing user, this method will return `null`.
 	 * @example
 	 * const shell = getShell("root", "test");
-	 * print("My public IP is: " + shell.hostComputer.publicIp);
+	 * console.log("My public IP is: " + shell.hostComputer.publicIp);
 	 */
 	function getShell(): Shell;
 	function getShell(username: string, password: string): Shell | null;
@@ -137,7 +137,7 @@ declare namespace GreyHack {
 	 * Returns the switch on the local network whose IP address matches
 	 * @example
 	 * const switch = getSwitch("192.168.1.4");
-	 * if (switch) print("This device is a switch!");
+	 * if (switch) console.log("This device is a switch!");
 	 */
 	function getSwitch(ip: string): Router | null;
 

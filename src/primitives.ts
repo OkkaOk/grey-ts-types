@@ -45,7 +45,7 @@ interface String {
 	 * @example
 	 * const myString = "I will not eat an ice cream!";
 	 * const newString = myString.remove("not ");
-	 * print(newString); // Prints "I will eat an ice cream!"
+	 * console.log(newString); // Prints "I will eat an ice cream!"
 	 */
 	remove(value: string): string;
 
@@ -57,7 +57,7 @@ interface String {
 	 * @example
 	 * const myString = "I am now online";
 	 * const newString = myString.replace("online", "offline");
-	 * print(newString); // Prints "I am now offline"
+	 * console.log(newString); // Prints "I am now offline"
 	 */
 	replace(pattern: string | RegExp, newValue: string, regexOptions?: string): string;
 
@@ -71,7 +71,7 @@ interface String {
 	 * @example
 	 * const csvString = "cat,turtle,dog,mouse";
 	 * const animals = csvString.split(",");
-	 * print(animals); // Prints ["cat", "turtle", "dog", "mouse"]
+	 * console.log(animals); // Prints ["cat", "turtle", "dog", "mouse"]
 	 */
 	split(pattern: string | RegExp, regexOptions?: string): string[];
 

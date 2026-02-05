@@ -28,7 +28,7 @@ declare namespace GreyHack {
 		 * const computer = getShell().hostComputer;
 		 * const passwd = computer.file("/etc/passwd");
 		 * if (passwd) {
-		 * 	print(`Content of passwd file\n${passwd.getContent()}`)
+		 * 	console.log(`Content of passwd file\n${passwd.getContent()}`)
 		 * }
 		 */
 		file(path: string): FileType | null;

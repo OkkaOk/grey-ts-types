@@ -15,7 +15,7 @@ declare namespace GreyHack {
 		 * if (isType(mined, "string"))
 		 * 	exit(`Coudn't get the amount of mined coin: ${mined}`);
 		 * 
-		 * print(`There are ${mined} coins mined for this coin`);
+		 * console.log(`There are ${mined} coins mined for this coin`);
 		 */
 		amountMined(coinName: string): number | string;
 

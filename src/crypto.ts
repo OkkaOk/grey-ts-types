@@ -112,7 +112,7 @@ declare namespace GreyHack {
 		 * 	const passwordhash = parsed[1];
 		 * 
 		 * 	const password = crypto.decipher(passwordhash);
-		 * 	print(`Password for user '${username}' is: ${password}`);
+		 * 	console.log(`Password for user '${username}' is: ${password}`);
 		 * }
 		 */
 		decipher(hash: string): string | null;

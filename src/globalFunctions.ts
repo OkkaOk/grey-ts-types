@@ -5,11 +5,6 @@ declare var globals: any;
 /** The parameters given to this script on launch */
 declare var params: string[];
 
-declare const console: {
-	readonly log: typeof GreyHack.print;
-	readonly clear: typeof GreyHack.clearScreen;
-}
-
 declare namespace GreyHack {
 	/** Returns a string with the name of the user who is executing the current script. */
 	function activeUser(): string;
@@ -48,13 +43,6 @@ declare namespace GreyHack {
 	 * Beware when passing non-ASCII values to intrinsics as they will likely get re-encoded as UTF-8. For example, `md5(char(255))` will actually return the hash of the two-byte sequence `0xC3 0xBF`.
 	 */
 	function char(code: number): string;
-
-	/**
-	 * Removes any text existing in a Terminal prior to this point.
-	 * 
-	 * Utilizing this method in an SSH encryption process will trigger an error, halting further script execution.
-	 */
-	function clearScreen(): null;
 
 	/** Returns the Unicode number of the first character of the string. In case an empty string is provided the script execution will crash. */
 	function code(char: string): number;
@@ -218,15 +206,6 @@ declare namespace GreyHack {
 	 */
 	function parentPath(path: string): string;
 
-	/**
-	 * Print a message on the Terminal.
-	 * 
-	 * There is also the possibility of styling output by using {@link https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/index.html|TextMeshPro rich-text tags}.
-	 * 
-	 * @param replaceText Clear the terminal before printing. This can be useful for creating a loading bar for example. 
-	 */
-	function print(value: any, replaceText?: boolean): null;
-
 	/** Returns a string containing the path of the script that is currently executing. It will update when using {@link Shell.launch|launch}, which makes it different from {@link launchPath}. */
 	function programPath(): string;
 
@@ -351,7 +330,6 @@ declare var bitXor: typeof GreyHack.bitXor;
 declare var bitwise: typeof GreyHack.bitwise;
 declare var cd: typeof GreyHack.cd;
 declare var char: typeof GreyHack.char;
-declare var clearScreen: typeof GreyHack.clearScreen;
 declare var code: typeof GreyHack.code;
 declare var commandInfo: typeof GreyHack.commandInfo;
 declare var currentDate: typeof GreyHack.currentDate;
@@ -375,7 +353,6 @@ declare var mailLogin: typeof GreyHack.mailLogin;
 declare var md5: typeof GreyHack.md5;
 declare var nslookup: typeof GreyHack.nslookup;
 declare var parentPath: typeof GreyHack.parentPath;
-declare var print: typeof GreyHack.print;
 declare var programPath: typeof GreyHack.programPath;
 declare var range: typeof GreyHack.range;
 declare var resetCtfPassword: typeof GreyHack.resetCtfPassword;

@@ -4,11 +4,12 @@
 		"noLib": true,
 		"skipLibCheck": true,
 		"noImplicitOverride": true,
-
-		"module": "none",
+		"module": "esnext",
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"outFile": "dist/index.d.ts",
 	},
-	"include": ["src/**/*.ts"],
+	"include": [
+		"src/**/*.ts"
+	],
 }

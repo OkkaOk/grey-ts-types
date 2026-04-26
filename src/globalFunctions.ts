@@ -380,6 +380,7 @@ declare var str: typeof GreyHack.str;
 declare var time: typeof GreyHack.time;
 declare var userBankNumber: typeof GreyHack.userBankNumber;
 declare var userInput: typeof GreyHack.userInput;
+declare var pollInput: typeof GreyHack.pollInput;
 declare var userMailAddress: typeof GreyHack.userMailAddress;
 declare var wait: typeof GreyHack.wait;
 declare var whois: typeof GreyHack.whois;

@@ -257,6 +257,25 @@ declare namespace GreyHack {
 	 */
 	function userInput(message?: string, isPassword?: boolean, anyKey?: boolean, addToHistory?: boolean): string;
 
+	/**
+	 * Reads the latest keyboard input in a non-blocking way while the script keeps running.
+	 * 
+	 * Polling is limited to one valid read every 250 milliseconds, so calls made before that interval return an empty string.
+	 * 
+	 * If a key was captured, the next valid poll returns it as a string and then clears it. If there is no captured input, it returns an empty string.
+	 * 
+	 * @example
+	 * while (true) {
+	 * 	const key = pollInput();
+	 * 	if (key !== "") {
+	 * 		console.log("Key: " + key);
+	 * 		if (key === "q") exit();
+	 * 	}
+	 * 	wait(0.25);
+	 * }
+	 */
+	function pollInput(): string;
+
 	/** 
 	 * Returns a string containing the email address of the player who is executing the script.
 	 * 
